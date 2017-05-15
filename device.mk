@@ -191,6 +191,13 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/gps/etc/sap.conf:system/etc/sap.conf \
     $(LOCAL_PATH)/gps/etc/xtwifi.conf:system/etc/xtwifi.conf
 
+# Darkness
+PRODUCT_PACKAGES += \
+    init.darkness.rc
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/darkness/99DarknessTweaks:system/etc/init.d/99DarknessTweaks
+
 # Input
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/idc/uinput-fpc.idc:system/usr/idc/uinput-fpc.idc

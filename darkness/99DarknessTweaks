@@ -1,0 +1,289 @@
+#!/system/bin/sh
+#
+# Device        : Xiaomi Mi 5 (gemini)
+# Maintainer    : MOVZX (MOVZX@Telegram.org)
+#
+
+BB="/system/xbin/busybox";
+
+# Definitions
+BCL=`ls -d /sys/devices/soc/soc:qcom,bcl/mode`;
+THERM=`ls -d /sys/module/msm_thermal/core_control`;
+CPU_LITTLE_FREQ=`ls -d /sys/devices/system/cpu/cpu0/cpufreq`;
+CPU_LITTLE_MIN_FREQ="307200";
+CPU_BIG_FREQ=`ls -d /sys/devices/system/cpu/cpu2/cpufreq`;
+CPU_BIG_MIN_FREQ="307200";
+CPU_GOVERNOR="darkness";
+VM=`ls -d /proc/sys/vm`;
+MMC0=`ls -d /sys/block/sda/queue`;
+MMC1=`ls -d /sys/block/dm-0/queue`;
+MMC2=`ls -d /sys/block/dm-1/queue`;
+IO_SCHEDULER="fiops";
+LMK=`ls -d /sys/module/lowmemorykiller/parameters`;
+LOG="/sdcard/DarknessTweaks.log";
+
+# Darkness Signature
+setprop net.hostname Darkness
+
+# Logging
+if [ -e $LOG ]; then
+	$BB rm $LOG;
+fi;
+
+echo "The Darkness™ Kernel" | tee -a $LOG;
+echo "" | tee -a $LOG;
+echo "Device        : Xiaomi Mi 5 (gemini)" | tee -a $LOG;
+echo "Maintainer    : MOVZX (MOVZX@Telegram.org)" | tee -a $LOG;
+echo "" | tee -a $LOG;
+echo "Starting Darkness Tweaks at $( date +"%m-%d-%Y %H:%M:%S" )" | tee -a $LOG;
+echo "" | tee -a $LOG;
+
+# CPU Tweaks
+echo "CPU Tweaks" | tee -a $LOG;
+#
+# Disable Thermal & BCL Core Control
+echo "    Disabling Thermal & BCL Core Control" | tee -a $LOG;
+#
+echo "0" > $THERM/enabled;
+for mode in $BCL/mode; do
+	$BB echo -n disable > $mode;
+done;
+for hotplug_mask in $BCL/hotplug_mask; do
+	bcl_hotplug_mask=`cat $hotplug_mask`;
+	$BB echo 0 > $hotplug_mask;
+done;
+for hotplug_soc_mask in $BCL/hotplug_soc_mask; do
+	bcl_soc_hotplug_mask=`cat $hotplug_soc_mask`;
+	$BB echo 0 > $hotplug_soc_mask;
+done;
+for mode in $BCL/mode; do
+	$BB echo -n enable > $mode;
+done;
+#
+# CPU Little Cluster
+echo "    Set CPU Little Cluster" | tee -a $LOG;
+#
+$BB echo "1" > /sys/devices/system/cpu/cpu0/online;
+for l in $CPU_LITTLE_FREQ; do
+	echo "    Set scaling_min_freq" | tee -a $LOG;
+	$BB echo $CPU_LITTLE_MIN_FREQ > $l/scaling_min_freq;
+	#
+	# Darkness CPU Governor
+	echo "    Set Darkness" | tee -a $LOG;
+	echo "        Set scaling_governor" | tee -a $LOG;
+	$BB echo $CPU_GOVERNOR > $l/scaling_governor;
+	echo "        Set target_loads" | tee -a $LOG;
+	$BB echo "1 307200:10 480000:20 652800:30 844800:40 960000:50 1036800:60 1113600:70 1190400:80 1228800:90 1363200:95" > $l/$CPU_GOVERNOR/target_loads;
+	echo "        Set above_hispeed_delay" | tee -a $LOG;
+	$BB echo "13000 1228800:21000" > $l/$CPU_GOVERNOR/above_hispeed_delay;
+	echo "        Set hispeed_freq" | tee -a $LOG;
+	$BB echo "1228800" > $l/$CPU_GOVERNOR/hispeed_freq;
+	echo "        Set go_hispeed_load" | tee -a $LOG;
+	$BB echo "80" > $l/$CPU_GOVERNOR/go_hispeed_load;
+	echo "        Set timer_rate" | tee -a $LOG;
+	$BB echo "20000" > $l/$CPU_GOVERNOR/timer_rate;
+	echo "        Set timer_slack" | tee -a $LOG;
+	$BB echo "80000" > $l/$CPU_GOVERNOR/timer_slack;
+	echo "        Set max_freq_hysteresis" | tee -a $LOG;
+	$BB echo "80000" > $l/$CPU_GOVERNOR/max_freq_hysteresis;
+	echo "        Set min_sample_time" | tee -a $LOG;
+	$BB echo "21000" > $l/$CPU_GOVERNOR/min_sample_time;
+	echo "        Set io_is_busy" | tee -a $LOG;
+	$BB echo "1" > $l/$CPU_GOVERNOR/io_is_busy;
+	echo "        Set use_migration_notif" | tee -a $LOG;
+	$BB echo "1" > $l/$CPU_GOVERNOR/use_migration_notif;
+	echo "        Set use_sched_load" | tee -a $LOG;
+	$BB echo "0" > $l/$CPU_GOVERNOR/use_sched_load;
+	echo "        Set align_windows" | tee -a $LOG;
+	$BB echo "1" > $l/$CPU_GOVERNOR/align_windows;
+	echo "        Set fastlane" | tee -a $LOG;
+	$BB echo "0" > $l/$CPU_GOVERNOR/fastlane;
+done;
+#
+# CPU Big Cluster
+echo "    Set CPU Big Cluster" | tee -a $LOG;
+#
+$BB echo "1" > /sys/devices/system/cpu/cpu2/online;
+for b in $CPU_BIG_FREQ; do
+	echo "    Set scaling_min_freq" | tee -a $LOG;
+	$BB echo $CPU_BIG_MIN_FREQ > $b/scaling_min_freq;
+	#
+	# Darkness CPU Governor
+	echo "    Set Darkness" | tee -a $LOG;
+	echo "        Set scaling_governor" | tee -a $LOG;
+	$BB echo $CPU_GOVERNOR > $b/scaling_governor;
+	echo "        Set target_loads" | tee -a $LOG;
+	$BB echo "1 307200:10 556800:20 883200:30 1190400:40 1248000:50 1324800:60 1478400:70 1632000:80 1785600:90 1804800:95" > $b/$CPU_GOVERNOR/target_loads;
+	echo "        Set above_hispeed_delay" | tee -a $LOG;
+	$BB echo "13000 1324800:34000" > $b/$CPU_GOVERNOR/above_hispeed_delay;
+	echo "        Set hispeed_freq" | tee -a $LOG;
+	$BB echo "1324800" > $b/$CPU_GOVERNOR/hispeed_freq;
+	echo "        Set go_hispeed_load" | tee -a $LOG;
+	$BB echo "85" > $b/$CPU_GOVERNOR/go_hispeed_load;
+	echo "        Set timer_rate" | tee -a $LOG;
+	$BB echo "20000" > $b/$CPU_GOVERNOR/timer_rate;
+	echo "        Set timer_slack" | tee -a $LOG;
+	$BB echo "80000" > $b/$CPU_GOVERNOR/timer_slack;
+	echo "        Set max_freq_hysteresis" | tee -a $LOG;
+	$BB echo "80000" > $b/$CPU_GOVERNOR/max_freq_hysteresis;
+	echo "        Set min_sample_time" | tee -a $LOG;
+	$BB echo "21000" > $l/$CPU_GOVERNOR/min_sample_time;
+	echo "        Set io_is_busy" | tee -a $LOG;
+	$BB echo "1" > $b/$CPU_GOVERNOR/io_is_busy;
+	echo "        Set use_migration_notif" | tee -a $LOG;
+	$BB echo "1" > $b/$CPU_GOVERNOR/use_migration_notif;
+	echo "        Set use_sched_load" | tee -a $LOG;
+	$BB echo "0" > $b/$CPU_GOVERNOR/use_sched_load;
+	echo "        Set align_windows" | tee -a $LOG;
+	$BB echo "1" > $b/$CPU_GOVERNOR/align_windows;
+	echo "        Set fastlane" | tee -a $LOG;
+	$BB echo "1" > $b/$CPU_GOVERNOR/fastlane;
+done;
+#
+# CPU Boost
+echo "    Set CPU Boost" | tee -a $LOG;
+# 
+$BB echo "0:0 1:0 2:1324800 3:0" > /sys/module/cpu_boost/parameters/input_boost_freq;
+$BB echo "50" > /sys/module/cpu_boost/parameters/input_boost_ms;
+$BB echo "1" > /sys/module/msm_performance/parameters/touchboost;
+#
+# Enable Thermal & BCL Core Control
+echo "    Enabling Thermal & BCL Core Control" | tee -a $LOG;
+#
+$BB echo "1" > $THERM/enabled; 
+for mode in $BCL/mode; do
+	$BB echo -n disable > $mode;
+done;
+for hotplug_mask in $BCL/hotplug_mask; do
+	$BB echo $bcl_hotplug_mask > $hotplug_mask;
+done;
+for hotplug_soc_mask in $BCL/hotplug_soc_mask; do
+	$BB echo $bcl_soc_hotplug_mask > $hotplug_soc_mask;
+done;
+for mode in $BCL/mode; do
+	$BB echo -n enable > $mode;
+done;
+
+# VM Tweaks
+echo "VM Tweaks" | tee -a $LOG;
+#
+for v in $VM; do
+	echo "    Set laptop_mode" | tee -a $LOG;
+	$BB echo "1" > $v/laptop_mode;
+	echo "    Set swappiness" | tee -a $LOG;
+	$BB echo "60" > $v/swappiness;
+	echo "    Set vfs_cache_pressure" | tee -a $LOG;
+	$BB echo "100" > $v/vfs_cache_pressure;
+	echo "    Set dirty_ratio" | tee -a $LOG;
+	$BB echo "50" > $v/dirty_ratio;
+	echo "    Set dirty_background_ratio" | tee -a $LOG;
+	$BB echo "10" > $v/dirty_background_ratio;
+	echo "    Set dirty_expire_centisecs" | tee -a $LOG;
+	$BB echo "500" > $v/dirty_expire_centisecs;
+	echo "    Set dirty_writeback_centisecs" | tee -a $LOG;
+	$BB echo "3000" > $v/dirty_writeback_centisecs;
+	echo "    Set page-cluster" | tee -a $LOG;
+	$BB echo "0" > $v/page-cluster;
+done;
+
+# I/O Scheduler Tweaks
+echo "I/O Scheduler Tweaks" | tee -a $LOG;
+#
+for i in $MMC0; do
+	echo "    Set scheduler" | tee -a $LOG;
+	$BB echo $IO_SCHEDULER > $i/scheduler;
+	# echo "    Set read_ahead_kb" | tee -a $LOG;
+	# $BB echo "1024" > $i/read_ahead_kb;
+	echo "    Set slice_idle" | tee -a $LOG;
+	$BB echo "0" > $i/iosched/slice_idle;
+	# echo "    Set nr_requests" | tee -a $LOG;
+	# $BB echo "256" > $i/iosched/nr_requests;
+	echo "    Set iostats" | tee -a $LOG;
+	$BB echo "0" > $i/iosched/iostats;
+	echo "    Set min_ratio" | tee -a $LOG;
+	$BB echo "5" > /sys/block/sda/bdi/min_ratio;
+done;
+for i in $MMC1; do
+	echo "    Set scheduler" | tee -a $LOG;
+	$BB echo $IO_SCHEDULER > $i/scheduler;
+	# echo "    Set read_ahead_kb" | tee -a $LOG;
+	# $BB echo "1024" > $i/read_ahead_kb;
+	echo "    Set slice_idle" | tee -a $LOG;
+	$BB echo "0" > $i/iosched/slice_idle;
+	# echo "    Set nr_requests" | tee -a $LOG;
+	# $BB echo "256" > $i/iosched/nr_requests;
+	echo "    Set iostats" | tee -a $LOG;
+	$BB echo "0" > $i/iosched/iostats;
+	echo "    Set min_ratio" | tee -a $LOG;
+	$BB echo "5" > /sys/block/dm-0/bdi/min_ratio;
+done;
+for i in $MMC2; do
+	echo "    Set scheduler" | tee -a $LOG;
+	$BB echo $IO_SCHEDULER > $i/scheduler;
+	# echo "    Set read_ahead_kb" | tee -a $LOG;
+	# $BB echo "1024" > $i/read_ahead_kb;
+	echo "    Set slice_idle" | tee -a $LOG;
+	$BB echo "0" > $i/iosched/slice_idle;
+	# echo "    Set nr_requests" | tee -a $LOG;
+	# $BB echo "256" > $i/iosched/nr_requests;
+	echo "    Set iostats" | tee -a $LOG;
+	$BB echo "0" > $i/iosched/iostats;
+	echo "    Set min_ratio" | tee -a $LOG;
+	$BB echo "5" > /sys/block/dm-1/bdi/min_ratio;
+done;
+
+# Low Memory Killer Tweaks
+echo "Low Memory Killer Tweaks" | tee -a $LOG;
+#
+for l in $LMK; do
+	echo "    Set enable_adaptive_lmk" | tee -a $LOG;
+	$BB echo "0" > $l/enable_adaptive_lmk;
+	echo "    Set minfree" | tee -a $LOG;
+	$BB echo "18432,23040,27648,32256,55296,80640" > $l/minfree;
+	# echo "    Set adj_max_shift" | tee -a $LOG;
+	# $BB echo "354" > $l/adj_max_shift;
+	# echo "    Set vmpressure_file_min" | tee -a $LOG;
+	# $BB echo "81250" > $l/vmpressure_file_min;
+	# echo "    Set enable_process_reclaim" | tee -a $LOG;
+	# $BB echo "1" > $l/enable_process_reclaim;
+	# echo "    Set min_score_adj" | tee -a $LOG;
+	# $BB echo "354" > $l/min_score_adj;
+	# echo "    Set per_swap_size" | tee -a $LOG;
+	# $BB echo "1024" > $l/per_swap_size;
+	# echo "    Set pressure_min" | tee -a $LOG;
+	# $BB echo "10" > $l/pressure_min;
+	# echo "    Set pressure_max" | tee -a $LOG;
+	# $BB echo "70" > $l/pressure_max;
+	# echo "    Set swap_opt_eff" | tee -a $LOG;
+	# $BB echo "30" > $l/swap_opt_eff;
+done;
+
+# Misc Tweaks
+echo "Misc Tweaks" | tee -a $LOG;
+echo "    Set force_fast_charge" | tee -a $LOG;
+$BB echo "1" > /sys/kernel/fast_charge/force_fast_charge;
+echo "    Set default_dcp_icl_ma" | tee -a $LOG;
+$BB echo "3000" > /sys/module/qpnp_smbcharger/parameters/default_dcp_icl_ma;
+echo "    Set default_hvdcp_icl_ma" | tee -a $LOG;
+$BB echo "3000" > /sys/module/qpnp_smbcharger/parameters/default_hvdcp_icl_ma;
+echo "    Set default_hvdcp3_icl_ma" | tee -a $LOG;
+$BB echo "3000" > /sys/module/qpnp_smbcharger/parameters/default_hvdcp3_icl_ma;
+echo "    Set low_battery_value" | tee -a $LOG;
+$BB echo "1" > /sys/module/battery_current_limit/parameters/low_battery_value;
+echo "    Set arch_power" | tee -a $LOG;
+$BB echo "1" > /sys/kernel/sched/arch_power;
+echo "    Set gentle_fair_sleepers" | tee -a $LOG;
+$BB echo "0" > /sys/kernel/sched/gentle_fair_sleepers;
+echo "    Set net.ipv4.tcp_congestion_control" | tee -a $LOG;
+sysctl -w net.ipv4.tcp_congestion_control=westwood;
+# echo "    Set Adreno GPU" | tee -a $LOG;
+# $BB echo "1" > /sys/class/kgsl/kgsl-3d0/devfreq/adrenoboost;
+# $BB echo "5" > /sys/class/kgsl/kgsl-3d0/default_pwrlevel;
+echo "    Set High Performance Snapdragon Audio" | tee -a $LOG;
+$BB echo "1" > /sys/module/snd_soc_wcd9330/parameters/high_perf_mode;
+echo "    Set CPU Core Control" | tee -a $LOG;
+$BB echo "0" > /sys/module/msm_thermal/core_control/enabled;
+$BB echo "Y" > /sys/module/msm_thermal/parameters/enabled;
+
+echo "" | tee -a $LOG;
+echo "Darkness Tweaks finished at $( date +"%m-%d-%Y %H:%M:%S" )" | tee -a $LOG;
