@@ -193,7 +193,9 @@ PRODUCT_COPY_FILES += \
 
 # Darkness
 PRODUCT_PACKAGES += \
-    init.darkness.rc
+    init.darkness.rc \
+    init.spectrum.rc \
+    init.spectrum.sh
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/darkness/99DarknessTweaks:system/etc/init.d/99DarknessTweaks
