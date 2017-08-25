@@ -36,8 +36,8 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/mixer_paths_tasha.xml:system/etc/mixer_paths_tasha.xml
 
 # ConfigPanel
-PRODUCT_PACKAGES += \
-    ConfigPanel
+#PRODUCT_PACKAGES += \
+#    ConfigPanel
 
 # Consumerir
 PRODUCT_PACKAGES += \
