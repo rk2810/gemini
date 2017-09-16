@@ -77,12 +77,12 @@ LOCAL_SRC_FILES    := etc/init.qcom.sh
 LOCAL_MODULE_PATH  := $(TARGET_ROOT_OUT)
 include $(BUILD_PREBUILT)
 
-# Darkness
+# Guyver
 include $(CLEAR_VARS)
-LOCAL_MODULE		:= init.darkness.rc
+LOCAL_MODULE		:= init.ngb.rc
 LOCAL_MODULE_TAGS	:= optional eng
 LOCAL_MODULE_CLASS	:= ETC
-LOCAL_SRC_FILES		:= etc/init.darkness.rc
+LOCAL_SRC_FILES		:= etc/init.ngb.rc
 LOCAL_MODULE_PATH	:= $(TARGET_ROOT_OUT)
 include $(BUILD_PREBUILT)
 

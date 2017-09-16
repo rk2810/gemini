@@ -191,14 +191,11 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/gps/etc/sap.conf:system/etc/sap.conf \
     $(LOCAL_PATH)/gps/etc/xtwifi.conf:system/etc/xtwifi.conf
 
-# Darkness
+#Guyver
 PRODUCT_PACKAGES += \
-    init.darkness.rc \
+    init.ngb.rc \
     init.spectrum.rc \
     init.spectrum.sh
-
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/darkness/99DarknessTweaks:system/etc/init.d/99DarknessTweaks
 
 # Input
 PRODUCT_COPY_FILES += \
