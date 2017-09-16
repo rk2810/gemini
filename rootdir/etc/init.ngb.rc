@@ -1,0 +1,60 @@
+# NGB init script
+
+on init
+# Create energy-aware scheduler tuning nodes
+   mkdir /dev/stune
+   mount cgroup none /dev/stune schedtune
+   mkdir /dev/stune/foreground
+   mkdir /dev/stune/background
+   mkdir /dev/stune/top-app
+   chown system system /dev/stune
+   chown system system /dev/stune/foreground
+   chown system system /dev/stune/background
+   chown system system /dev/stune/top-app
+   chown system system /dev/stune/tasks
+   chown system system /dev/stune/foreground/tasks
+   chown system system /dev/stune/background/tasks
+   chown system system /dev/stune/top-app/tasks
+   chmod 0664 /dev/stune/tasks
+   chmod 0664 /dev/stune/foreground/tasks
+   chmod 0664 /dev/stune/background/tasks
+   chmod 0664 /dev/stune/top-app/tasks
+
+on property:sys.boot_completed=1
+
+   # GPU 
+   write /sys/class/kgsl/kgsl-3d0/devfreq/max_freq 560000000
+   write /sys/class/kgsl/kgsl-3d0/devfreq/min_freq 133000000
+   write /sys/class/kgsl/kgsl-3d0/default_pwrlevel 6
+                                                              
+   # Set Swappiness
+   write /proc/sys/vm/swappiness 20
+  
+   # Backlight dimmer
+   write /sys/module/mdss_fb/parameters/backlight_dimmer 1
+
+   # Set Thermal
+   write /sys/module/msm_thermal/core_control/enabled 0
+   write /sys/module/msm_thermal/parameters/enabled Y
+   write /sys/module/msm_thermal/parameters/temp_threshold 45
+   write /sys/module/msm_thermal/vdd_restriction/enabled 0
+
+   # Set Misc
+   write /sys/kernel/sched/arch_power 1
+   write /sys/kernel/sched/gentle_fair_sleepers 0
+   
+   # Disable FSync
+   write /sys/module/sync/parameters/fsync_enabled N
+
+   # Disable some wakelocks
+   write /sys/module/wakeup/parameters/enable_ipa_ws N
+   write /sys/module/wakeup/parameters/enable_netlink_ws N
+   write /sys/module/wakeup/parameters/enable_qcom_rx_wakelock_ws N
+   write /sys/module/wakeup/parameters/enable_timerfd_ws N
+   write /sys/module/wakeup/parameters/enable_wlan_extscan_wl_ws N
+   write /sys/module/wakeup/parameters/enable_wlan_ws N
+
+   # LMK
+   write /sys/module/lowmemorykiller/parameters/minfree "14746,18432,22118,25805,40000,55000"
+   
+
