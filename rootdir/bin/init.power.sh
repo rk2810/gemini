@@ -13,6 +13,73 @@ function copy() {
 
 ################################################################################
 
+#VOX POPULI#
+on init
+
+    # Create Power HAL tunables
+    mkdir /dev/voxpopuli 0555 system system
+
+on boot
+    # update cpusets now that processors are up
+    write /dev/cpuset/top-app/cpus 0-3
+    write /dev/cpuset/foreground/cpus 0-3
+    write /dev/cpuset/foreground/boost/cpus 0-3
+    write /dev/cpuset/background/cpus 0-3
+    write /dev/cpuset/system-background/cpus 0-3
+
+    # Add a cpuset for the camera daemon
+    # we want all cores for camera
+    mkdir /dev/cpuset/camera-daemon
+    write /dev/cpuset/camera-daemon/cpus "0-3"
+    write /dev/cpuset/camera-daemon/mems 0
+    chown system system /dev/cpuset/camera-daemon
+    chown system system /dev/cpuset/camera-daemon/tasks
+    chmod 0664 /dev/cpuset/camera-daemon/tasks
+
+    # set default schedTune value for foreground/top-app (only affects EAS)
+    write /dev/stune/foreground/schedtune.prefer_idle 1
+    write /dev/stune/foreground/schedtune.boost 0
+    write /dev/stune/background/schedtune.boost 0
+    write /dev/stune/background/schedtune.prefer_idle 0
+    write /dev/stune/top-app/schedtune.boost 0
+    write /dev/stune/top-app/schedtune.prefer_idle 1
+    write /dev/stune/schedtune.boost 0
+    write /dev/stune/schedtune.prefer_idle 0
+
+    # Set Power HAL tunables
+
+    write /dev/voxpopuli/enable_interaction_boost   1
+    write /dev/voxpopuli/fling_min_boost_duration   250
+    write /dev/voxpopuli/fling_max_boost_duration   2500
+    write /dev/voxpopuli/fling_boost_topapp         10
+    write /dev/voxpopuli/fling_min_freq_big         1036
+    write /dev/voxpopuli/fling_min_freq_little      1036
+    write /dev/voxpopuli/touch_boost_duration       250
+    write /dev/voxpopuli/touch_boost_topapp         0
+    write /dev/voxpopuli/touch_min_freq_big         1036
+    write /dev/voxpopuli/touch_min_freq_little      1036
+    chmod 0644 /dev/voxpopuli/enable_interaction_boost
+    chmod 0644 /dev/voxpopuli/fling_min_boost_duration
+    chmod 0644 /dev/voxpopuli/fling_max_boost_duration
+    chmod 0644 /dev/voxpopuli/fling_boost_topapp
+    chmod 0644 /dev/voxpopuli/fling_min_freq_big
+    chmod 0644 /dev/voxpopuli/fling_min_freq_little
+    chmod 0644 /dev/voxpopuli/touch_boost_duration
+    chmod 0644 /dev/voxpopuli/touch_boost_topapp
+    chmod 0644 /dev/voxpopuli/touch_min_freq_big
+    chmod 0644 /dev/voxpopuli/touch_min_freq_little
+    chown system system /dev/voxpopuli/enable_interaction_boost
+    chown system system /dev/voxpopuli/fling_min_boost_duration
+    chown system system /dev/voxpopuli/fling_max_boost_duration
+    chown system system /dev/voxpopuli/fling_boost_topapp
+    chown system system /dev/voxpopuli/fling_min_freq_big
+    chown system system /dev/voxpopuli/fling_min_freq_little
+    chown system system /dev/voxpopuli/touch_boost_duration
+    chown system system /dev/voxpopuli/touch_boost_topapp
+    chown system system /dev/voxpopuli/touch_min_freq_big
+    chown system system /dev/voxpopuli/touch_min_freq_little
+
+
 # disable thermal hotplug to switch governor
 write /sys/module/msm_thermal/core_control/enabled 0
 
