@@ -168,7 +168,11 @@ BOARD_FLASH_BLOCK_SIZE := 262144 # (BOARD_KERNEL_PAGESIZE * 64)
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 
-# Power
+#Power
+TARGET_POWERHAL_VARIANT := voxpopuli
+TARGET_USES_INTERACTION_BOOST := true
+ENABLE_CPUSETS := true
+ENABLE_SCHEDBOOST := true
 BOARD_HAL_STATIC_LIBRARIES := libdumpstate.msm8996
 
 # QCOM
@@ -193,6 +197,7 @@ TARGET_RIL_VARIANT := caf
 
 # SELinux
 include device/qcom/sepolicy/sepolicy.mk
+-include device/voxpopuli/sepolicy/sepolicy.mk
 
 BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy
 
