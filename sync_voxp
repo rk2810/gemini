@@ -1,0 +1,8 @@
+echo Running !;
+cd ../..;
+echo Started cloning;
+git clone https://github.com/EAS-Project/android_device_voxpopuli.git -b msm8996 voxpopuli;
+cd xiaomi/gemini;
+echo done!;
+
+
