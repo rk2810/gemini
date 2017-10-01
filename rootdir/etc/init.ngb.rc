@@ -27,15 +27,16 @@ on boot
     write /dev/stune/foreground/schedtune.boost 0
     write /dev/stune/background/schedtune.boost 0
     write /dev/stune/background/schedtune.prefer_idle 0
-    write /dev/stune/top-app/schedtune.boost 0
+    write /dev/stune/top-app/schedtune.boost 1
     write /dev/stune/top-app/schedtune.prefer_idle 1
     write /dev/stune/schedtune.boost 0
     write /dev/stune/schedtune.prefer_idle 0
 
     # Thermal
-    write /sys/module/msm_thermal/core_control/enabled 0
-    write /sys/module/msm_thermal/parameters/enabled Y
+    write /sys/module/msm_thermal/core_control/enabled 1
+    write /sys/module/msm_thermal/parameters/enabled 0
     write /sys/module/msm_thermal/parameters/temp_threshold 45
+    write /sys/module/msm_thermal/parameters/core_limit_temp_degC 55
     write /sys/module/msm_thermal/vdd_restriction/enabled 0
 
 on enable-low-power
@@ -132,7 +133,7 @@ on enable-low-power
     write /proc/sys/vm/swappiness 20
    
     # Backlight dimmer
-    write /sys/module/mdss_fb/parameters/backlight_dimmer 1
+    write /sys/module/mdss_fb/parameters/backlight_dimmer 0
  
     # Set Misc
     write /sys/kernel/sched/arch_power 1
