@@ -141,14 +141,6 @@ on enable-low-power
     
     # Disable FSync
     write /sys/module/sync/parameters/fsync_enabled N
- 
-    # Disable some wakelocks
-    write /sys/module/wakeup/parameters/enable_ipa_ws N
-    write /sys/module/wakeup/parameters/enable_netlink_ws N
-    write /sys/module/wakeup/parameters/enable_qcom_rx_wakelock_ws N
-    write /sys/module/wakeup/parameters/enable_timerfd_ws N
-    write /sys/module/wakeup/parameters/enable_wlan_extscan_wl_ws N
-    write /sys/module/wakeup/parameters/enable_wlan_ws N
 
     setprop sys.io.scheduler tripndroid
 
