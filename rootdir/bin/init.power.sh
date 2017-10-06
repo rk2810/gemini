@@ -125,23 +125,27 @@ write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "schedutil"
 write /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor "schedutil"
 
 # set schedutil adjustments
-write /sys/devices/system/cpu/cpu0/cpufreq/schedutil/down_rate_limit_us 6000
 write /sys/devices/system/cpu/cpu0/cpufreq/schedutil/up_rate_limit_us 1000
-write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/down_rate_limit_us 6000
-write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/up_rate_limit_us 2000
+write /sys/devices/system/cpu/cpu0/cpufreq/schedutil/down_rate_limit_us 1000
+write /sys/devices/system/cpu/cpu0/cpufreq/schedutil/iowait_boost_enable 1
+write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/up_rate_limit_us 1000
+write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/down_rate_limit_us 1000
+write /sys/devices/system/cpu/cpu2/cpufreq/schedutil/iowait_boost_enable 1
 
 # re-enable thermal hotplug
 write /sys/module/msm_thermal/core_control/enabled 1
 
 # input boost configuration
-write /sys/module/cpu_boost/parameters/input_boost_freq "0:1324800 2:1324800"
-write /sys/module/cpu_boost/parameters/input_boost_ms 40
+write /sys/module/cpu_boost/parameters/input_boost_enabled 1
+write /sys/module/cpu_boost/parameters/dynamic_stune_boost 0
+write /sys/module/cpu_boost/parameters/input_boost_freq "0:960000 2:979200"
+write /sys/module/cpu_boost/parameters/input_boost_ms 30
 
 # Setting b.L scheduler parameters
 write /proc/sys/kernel/sched_boost 0
 write /proc/sys/kernel/sched_migration_fixup 1
-write /proc/sys/kernel/sched_upmigrate 95
-write /proc/sys/kernel/sched_downmigrate 90
+write /proc/sys/kernel/sched_upmigrate 98
+write /proc/sys/kernel/sched_downmigrate 85
 write /proc/sys/kernel/sched_freq_inc_notify 400000
 write /proc/sys/kernel/sched_freq_dec_notify 400000
 write /proc/sys/kernel/sched_spill_nr_run 3
