@@ -135,8 +135,8 @@ write /sys/module/msm_thermal/core_control/enabled 1
 
 # input boost configuration
 write /sys/module/cpu_boost/parameters/input_boost_enabled 1
-write /sys/module/cpu_boost/parameters/input_boost_freq "0:960000 2:979200"
-write /sys/module/cpu_boost/parameters/input_boost_ms 30
+write /sys/module/cpu_boost/parameters/input_boost_freq "0:960000 2:940800"
+write /sys/module/cpu_boost/parameters/input_boost_ms 40
 
 # Setting b.L scheduler parameters
 write /proc/sys/kernel/sched_boost 0
