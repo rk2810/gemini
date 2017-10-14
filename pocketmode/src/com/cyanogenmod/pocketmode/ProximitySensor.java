@@ -24,7 +24,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 
-import com.android.internal.util.cm.FileUtils;
+import org.cyanogemod.internal.util.FileUtils;
 
 public class ProximitySensor implements SensorEventListener {
 

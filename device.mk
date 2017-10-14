@@ -142,7 +142,7 @@ PRODUCT_PACKAGES += \
     init.qcom.sh
 
 # CMHW
-PRODUCT_PACKAGES += \
+#PRODUCT_PACKAGES += \
     org.cyanogenmod.hardware \
     org.cyanogenmod.hardware.xml
 
