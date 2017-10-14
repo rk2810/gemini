@@ -24,16 +24,15 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import com.cyanogenmod.settings.device.utils.DeviceKeyHandler;
+import com.android.internal.os.DeviceKeyHandler;
 
-import com.cyanogenmod.settings.device.utils.FileUtils;
+import com.android.internal.util.cm.FileUtils;
 
 public class KeyHandler implements DeviceKeyHandler {
 
     private static final String TAG = KeyHandler.class.getSimpleName();
     private static final String VIRTUAL_KEYS_NODE = "/proc/touchpanel/capacitive_keys_enable";
     private static final String FP_HOME_NODE = "/sys/devices/soc/soc:fpc_fpc1020/enable_key_events";
-	public static final String VIRTUAL_KEYS_NODE = "/proc/touchpanel/capacitive_keys_enable";
 
     private static boolean sScreenTurnedOn = true;
     private static final boolean DEBUG = false;
@@ -61,9 +60,14 @@ public class KeyHandler implements DeviceKeyHandler {
     }
 
     public boolean handleKeyEvent(KeyEvent event) {
-        boolean virtualKeysEnabled = FileUtils.readOneLine(VIRTUAL_KEYS_NODE).equals("0");
+        boolean virtualKeysEnabled = FileUtils.isFileReadable(VIRTUAL_KEYS_NODE) &&
+                FileUtils.readOneLine(VIRTUAL_KEYS_NODE).equals("0");
         boolean fingerprintHomeButtonEnabled = FileUtils.isFileReadable(FP_HOME_NODE) &&
                 FileUtils.readOneLine(FP_HOME_NODE).equals("1");
+
+        if (!hasSetupCompleted()) {
+            return false;
+        }
 
         if (event.getKeyCode() == KeyEvent.KEYCODE_HOME) {
             if (event.getScanCode() == 96) {
@@ -77,5 +81,10 @@ public class KeyHandler implements DeviceKeyHandler {
             }
         }
         return false;
+    }
+
+    private boolean hasSetupCompleted() {
+        return Settings.Secure.getInt(mContext.getContentResolver(),
+                Settings.Secure.USER_SETUP_COMPLETE, 0) != 0;
     }
 }

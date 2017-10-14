@@ -22,6 +22,7 @@
           android:versionName="2.4" >
 
     <uses-permission android:name="android.permission.INJECT_EVENTS"/>
+    <protected-broadcast android:name="com.cyanogenmod.settings.device.CUST_UPDATE" />
 
     <uses-sdk
         android:minSdkVersion="24" />
@@ -64,10 +65,7 @@
         <receiver android:name=".Startup" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-<<<<<<< HEAD
                 <action android:name="android.intent.action.PRE_BOOT_COMPLETED" />
-=======
->>>>>>> 83d7cd0... gemini: make configpanel work with DU
             </intent-filter>
         </receiver>
     </application>
