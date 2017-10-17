@@ -536,4 +536,6 @@
 
     <!-- If this is true, the screen will fade off. -->
     <bool name="config_animateScreenLights">true</bool>
+    <!-- Whether home button can wake device -->
+    <bool name="config_homeCanWake">true</bool>
 </resources>
