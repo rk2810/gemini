@@ -2,3 +2,29 @@
 persist.qfp=false
 ro.hardware.fingerprint=fpc
 sys.fpc.tu.disabled=0
+
+# Data (From Capricon)
+persist.data.mode=concurrent
+persist.data.wda.enable=true
+persist.data.df.dl_mode=5
+persist.data.df.ul_mode=5
+persist.data.df.agg.dl_pkt=10
+persist.data.df.agg.dl_size=4096
+persist.data.df.mux_count=8
+persist.data.df.iwlan_mux=9
+persist.data.qmi.adb_logmask=0
+persist.sys.ssr.restart_level=ALL_ENABLE
+
+# HWUI Tweaks (from Pixel)
+debug.sf.disable_hwc_vds=1
+sdm.debug.disable_rotator_split=1
+qdcm.only_pcc_for_trans=1
+qdcm.diagonal_matrix_mode=1
+vidc.debug.perf.mode=2
+ro.hwui.gradient_cache_size=1
+ro.hwui.drop_shadow_cache_size=6
+ro.hwui.texture_cache_flushrate=0.4
+ro.hwui.text_small_cache_width=1024
+ro.hwui.text_small_cache_height=1024
+ro.hwui.text_large_cache_width=2048
+ro.hwui.text_large_cache_height=1024

@@ -41,3 +41,8 @@ PRODUCT_BUILD_PROP_OVERRIDES += \
     PRIVATE_BUILD_DESC="gemini-user 7.0 NRD90M V8.2.1.0.NAACNEB release-keys"
 
 TARGET_VENDOR := Xiaomi
+
+DEFAULT_ROOT_METHOD := magisk
+
+# Boot animation resolution
+TARGET_BOOT_ANIMATION_RES := 1080
