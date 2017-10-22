@@ -31,7 +31,7 @@ import com.cyanogenmod.settings.device.utils.FileUtils;
 public class KeyHandler implements DeviceKeyHandler {
 
     private static final String TAG = KeyHandler.class.getSimpleName();
-
+    private static final String VIRTUAL_KEYS_NODE = "/proc/touchpanel/capacitive_keys_enable";
     private static final String FP_HOME_NODE = "/sys/devices/soc/soc:fpc_fpc1020/enable_key_events";
 
     private static boolean sScreenTurnedOn = true;
@@ -60,8 +60,8 @@ public class KeyHandler implements DeviceKeyHandler {
     }
 
     public boolean handleKeyEvent(KeyEvent event) {
-        CMHardwareManager hardware = CMHardwareManager.getInstance(mContext);
-        boolean virtualKeysEnabled = hardware.get(CMHardwareManager.FEATURE_KEY_DISABLE);
+        boolean virtualKeysEnabled = FileUtils.isFileReadable(VIRTUAL_KEYS_NODE) &&
+                FileUtils.readOneLine(VIRTUAL_KEYS_NODE).equals("0");
         boolean fingerprintHomeButtonEnabled = FileUtils.isFileReadable(FP_HOME_NODE) &&
                 FileUtils.readOneLine(FP_HOME_NODE).equals("1");
 

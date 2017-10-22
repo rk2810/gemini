@@ -37,7 +37,8 @@ public class Startup extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();
-        if (cyanogenmod.content.Intent.ACTION_INITIALIZE_CM_HARDWARE.equals(action)) {
+        if (Intent.ACTION_BOOT_COMPLETED.equals(action)
+                || Intent.ACTION_PRE_BOOT_COMPLETED.equals(action)) {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
             // Disable button settings if needed
@@ -72,9 +73,9 @@ public class Startup extends BroadcastReceiver {
     }
 
     static boolean hasButtonProcs() {
-        return (FileUtils.fileExists(Constants.BUTTON_SWAP_NODE) ||
-                FileUtils.fileExists(Constants.FP_HOME_KEY_NODE) ||
-                FileUtils.fileExists(Constants.FP_WAKEUP_NODE));
+        return new File(Constants.BUTTON_SWAP_NODE).exists() ||
+                new File(Constants.FP_HOME_KEY_NODE).exists() ||
+                new File(Constants.FP_WAKEUP_NODE).exists();
     }
 
     private void disableComponent(Context context, String component) {

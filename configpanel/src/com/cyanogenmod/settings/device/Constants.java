@@ -22,9 +22,6 @@ import java.util.Map;
 
 public class Constants {
 
-    // Category keys
-    public static final String CATEGORY_FP = "fp_key";
-
     // Preference keys
     public static final String BUTTON_SWAP_KEY = "button_swap";
     public static final String FP_HOME_KEY = "fp_home";
