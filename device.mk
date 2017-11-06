@@ -252,12 +252,6 @@ PRODUCT_PACKAGES += \
     libOmxVenc \
     libstagefrighthw
 
-# OTA Updates
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.ota.romname=AOSP-GEMINI-OREO \
-    ro.ota.version=$(shell date -u +%Y%m%d) \
-    ro.ota.manifest=https://romhut.com/roms/aosp-gemini-oreo/ota.xml
-
 # QMI
 PRODUCT_PACKAGES += \
     libjson \
