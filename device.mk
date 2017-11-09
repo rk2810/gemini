@@ -121,7 +121,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     camera.msm8996 \
     libmm-qcamera \
-    Camera2
+    SnapdragonCamera
 
 # Device config scripts
 PRODUCT_PACKAGES += \
