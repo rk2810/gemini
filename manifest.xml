@@ -72,19 +72,6 @@
         </interface>
     </hal>
     <hal format="hidl">
-        <name>android.hardware.media.omx</name>
-        <transport>hwbinder</transport>
-        <version>1.0</version>
-        <interface>
-            <name>IOmx</name>
-            <instance>default</instance>
-        </interface>
-        <interface>
-            <name>IOmxStore</name>
-            <instance>default</instance>
-        </interface>
-    </hal>
-    <hal format="hidl">
         <name>android.hardware.memtrack</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
@@ -112,6 +99,7 @@
         </interface>
     </hal>
     <hal format="hidl">
+<<<<<<< HEAD
         <name>android.hardware.sensors</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
@@ -130,6 +118,8 @@
         </interface>
     </hal>
     <hal format="hidl">
+=======
+>>>>>>> parent of d2d0b10... Revert "Re-introduce of POWER HAL API 1.1 impl for Marlin"
         <name>android.hardware.wifi</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
