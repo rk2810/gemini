@@ -63,7 +63,6 @@
         </interface>
     </hal>
     <hal format="hidl">
-<<<<<<< HEAD
         <name>android.hardware.graphics.mapper</name>
         <transport arch="32+64">passthrough</transport>
         <version>2.0</version>
@@ -168,8 +167,6 @@
         </interface>
     </hal>
     <hal format="hidl">
-=======
->>>>>>> d2d0b10... Revert "Re-introduce of POWER HAL API 1.1 impl for Marlin"
         <name>android.hardware.wifi</name>
         <transport>hwbinder</transport>
         <version>1.0</version>
