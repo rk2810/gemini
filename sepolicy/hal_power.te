@@ -4,5 +4,7 @@
 
 allow hal_power debugfs_rpm:file { open read getattr };
 
+allow hal_power debugfs_rpm:file { open read getattr };
+
 allow hal_power sysfs_soc:dir search;
 allow hal_power sysfs_soc:file { open read };
